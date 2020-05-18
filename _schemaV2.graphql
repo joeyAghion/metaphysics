@@ -4257,6 +4257,8 @@ type Feature {
   name: String!
   isActive: Boolean!
   description(format: Format): String
+  subheadline(format: Format): String
+  callout(format: Format): String
   image: FeatureImage
 
   # Features are composed of sets, which are themselves composed of items of various types
@@ -4279,6 +4281,7 @@ type FeaturedLink {
   image: Image
   initials(length: Int = 3): String
   subtitle: String
+  description(format: Format): String
   title: String
 }
 
@@ -4991,10 +4994,6 @@ enum HomePageHeroUnitPlatform {
 }
 
 type HomePageMarketingCollectionsModule {
-  _unusedField: String
-    @deprecated(
-      reason: "This field only exists to satisfy the GraphQL Schema validation"
-    )
   results: [MarketingCollection]!
 }
 
@@ -8514,19 +8513,19 @@ type ViewingRoom {
   artworkIDs: [String!]!
 
   # Body copy
-  body: String!
+  body: String
 
   # Datetime after which the viewing room is no longer viewable
-  endAt: ISO8601DateTime!
+  endAt: ISO8601DateTime
 
   # Image URL for hero image on viewing room home screen
-  heroImageURL: String!
+  heroImageURL: String
 
   # Unique ID for this room
   internalID: ID!
 
   # Introductory paragraph
-  introStatement: String!
+  introStatement: String
 
   # ID of the partner associated with this viewing room
   partnerID: String!
@@ -8534,7 +8533,7 @@ type ViewingRoom {
   slug: String!
 
   # Datetime when the viewing room is viewable
-  startAt: ISO8601DateTime!
+  startAt: ISO8601DateTime
   subsections: [ViewingRoomSubsection!]
   timeZone: String
 
