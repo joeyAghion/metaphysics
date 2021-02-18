@@ -24,18 +24,16 @@ export default (url, options = {}) => {
     delete opts.userAgent
     opts.headers = assign({}, { "User-Agent": userAgent }, opts.headers)
 
-    const { method } = opts
-    let cleanedUrl: string = url
-    if (method === "PUT" || method === "POST") {
-      // Move query params out of url and place into `body`.
-      const params = parse(cleanedUrl)
-      cleanedUrl = cleanedUrl.split("?")[0]
+    if (opts.method === "PUT" || opts.method === "POST") {
+      // Move params out of url and place into `body`.
+      let parts: Array<string> = url.split("?")
+      url = parts[0]
 
-      opts.body = params
+      opts.body = parse(parts[1])
       opts.json = true
     }
 
-    request(cleanedUrl, opts, (err, response) => {
+    request(url, opts, (err, response) => {
       if (err) return reject(err)
       // If there is a non-200 status code, reject.
       if (
