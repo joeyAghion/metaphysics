@@ -2,6 +2,7 @@ import { assign, clone, get, defaults, compact } from "lodash"
 import request from "request"
 import config from "config"
 import { HTTPError } from "lib/HTTPError"
+import { parse } from "qs"
 
 // TODO: This `any` is a shame, but
 // the type seems to be a bit of a mix of the original
@@ -23,7 +24,18 @@ export default (url, options = {}) => {
     delete opts.userAgent
     opts.headers = assign({}, { "User-Agent": userAgent }, opts.headers)
 
-    request(url, opts, (err, response) => {
+    const { method } = opts
+    let cleanedUrl: string = url
+    if (method === "PUT" || method === "POST") {
+      // Move query params out of url and place into `body`.
+      const params = parse(cleanedUrl)
+      cleanedUrl = cleanedUrl.split("?")[0]
+
+      opts.body = params
+      opts.json = true
+    }
+
+    request(cleanedUrl, opts, (err, response) => {
       if (err) return reject(err)
       // If there is a non-200 status code, reject.
       if (
